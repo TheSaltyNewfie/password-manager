@@ -4,9 +4,11 @@ CC = g++
 LD = g++
 OBJ = build/*.o
 SRC = src/*
+INC = -I/include/
 
 main: $(OBJ)
-	$(LD) $(OBJ) -o build/main
+	$(LD) $(OBJ) -o build/main -pthread
+
 
 
 $(OBJ): $(SRC)
