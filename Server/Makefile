@@ -7,12 +7,11 @@ SRC = src/*
 INC = -I/include/
 
 main: $(OBJ)
-	$(LD) $(OBJ) -o build/main -pthread
-
+	$(LD) $(OBJ) -o build/main -pthread -lpqxx -lpq
 
 
 $(OBJ): $(SRC)
-	$(CC) -c $(SRC)
+	$(CC) $(INC) -c $(SRC) 
 	mv *.o build/
 
 
