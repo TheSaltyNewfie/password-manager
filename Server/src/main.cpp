@@ -7,12 +7,22 @@ int main() {
 
     crow::SimpleApp app;
 
-    //Perhaps we can get params in the link? and get the keys and what not via that
-    CROW_ROUTE(app, "/")([](){
-        return "Hello world";
-    });
+    CROW_ROUTE(app, "/auth").methods(crow::HTTPMethod::GET, crow::HTTPMethod::PATCH)
+    ([](const crow::request& req)
+    {
 
-    std::cout << "Ay Yo?";
+        char* user_id = req.url_params.get("userid");
+        char* password = req.url_params.get("password");
+
+        if(user_id != nullptr && password != nullptr)
+        {
+            std::cout << "[AUTH] USER ID: " << user_id << "\nPASSWORD: " << password << std::endl;
+            return crow::json::wvalue{{"user_id", user_id}, {"password", password}};
+        }
+
+        return crow::json::wvalue{{"error", "error details would be here"}};
+    });
+    std::cout << "Ay Yo?\n";
 
     app.port(18080).multithreaded().run();
 
