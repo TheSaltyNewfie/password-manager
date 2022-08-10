@@ -1,11 +1,13 @@
 #include <iostream>
 #define CROW_MAIN
 #include "../include/crow_all.h"
+#include "../include/schemas.hpp"
 #include <pthread.h>
+#include <pqxx/pqxx>
 
 int main() {
-
     crow::SimpleApp app;
+    pqxx::connection c("dbname=server user=server");
 
     CROW_ROUTE(app, "/auth").methods(crow::HTTPMethod::GET, crow::HTTPMethod::PATCH)
     ([](const crow::request& req)
