@@ -20,12 +20,13 @@ class Password
 {
 public:
     uint64_t m_id;
+    uint64_t m_user_id;
     std::string m_account_name;
     std::string m_password;
     std::string m_salt;
 public:
-    Password(uint64_t id, std::string account_name, std::string password, std::string salt)
-        : m_id(id), m_account_name(account_name), m_password(password), m_salt(salt)
+    Password(uint64_t id, uint64_t user_id, std::string account_name, std::string password, std::string salt)
+        : m_id(id), m_user_id(user_id), m_account_name(account_name), m_password(password), m_salt(salt)
     {
     }
 };
