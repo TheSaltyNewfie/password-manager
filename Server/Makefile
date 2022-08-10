@@ -12,7 +12,7 @@ main: $(OBJ)
 
 
 $(OBJ): $(SRC)
-	$(CC) -c $(SRC)
+	$(CC) -c $(SRC) -std=c++20
 	mv *.o build/
 
 
