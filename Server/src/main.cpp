@@ -1,31 +1,30 @@
-#include <iostream>
 #define CROW_MAIN
-#include "../include/crow_all.h"
-#include "../include/schemas.hpp"
+#include "crow_all.h"
+#include "database.hpp"
+#include "schemas.hpp"
+#include <iostream>
 #include <pqxx/pqxx>
 #include <pthread.h>
 
 int main() {
   crow::SimpleApp app;
   pqxx::connection c("dbname=server user=server");
+  pqxx::work conn = pqxx::work(c);
 
   CROW_ROUTE(app, "/auth")
       .methods(crow::HTTPMethod::GET,
-               crow::HTTPMethod::PATCH)([](const crow::request &req) {
-        char *id = req.url_params.get("id");
+               crow::HTTPMethod::PATCH)([&conn](const crow::request &req) {
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
-        char *salt = req.url_params.get("salt");
 
-        if (id != nullptr && username != nullptr && password_hash != nullptr &&
-            salt != nullptr) {
-          // std::cout << "[AUTH] USER ID: " << user_id << "\nPASSWORD: " <<
-          // password << std::endl;
+        User user = get_user(username, password_hash, conn);
+        if (user.m_id == "-1") {
+          return crow::json::wvalue{{"error", "User does not exist."}};
+        }
+        std::string token = cookie(user, conn);
 
-          return crow::json::wvalue{{"id", id},
-                                    {"username", username},
-                                    {"password_hash", password_hash},
-                                    {"salt", salt}};
+        if (username != nullptr && password_hash != nullptr) {
+          return crow::json::wvalue{{"token", token}};
         }
 
         return crow::json::wvalue{{"error", "error details would be here"}};
@@ -42,8 +41,6 @@ int main() {
         return "You technically logged into an account, but not really cause "
                "this doesnt work yet :)";
       });
-
-  std::cout << "Ay Yo?\n";
 
   app.port(18080).multithreaded().run();
 

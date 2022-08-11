@@ -4,7 +4,7 @@ CC = g++
 LD = g++
 OBJ = build/*.o
 SRC = src/*
-INC = -I/include/
+INC = -Iinclude/
 
 main: $(OBJ)
 	$(LD) $(OBJ) -o build/main -pthread -lpqxx -lpq
