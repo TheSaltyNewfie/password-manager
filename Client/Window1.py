@@ -11,6 +11,9 @@ def open_Vault():
 def closed_window():
     Window.hide(sign_up_window)
 
+def open_Password():
+    Window.show(Password_window)
+
 
 ##  Window 1  ##
 
@@ -22,6 +25,9 @@ sign_up_window.hide()
 Vault_window = Window(app, title="My Passwords", layout="grid")
 Vault_window.hide()
 
+Password_window = Window(app, title="New Password", layout="grid")
+Password_window.hide()
+
 ##  Login  ##
 
 User = Text(app, text="User ID: ", size=20, grid=[0, 0], align="left")
@@ -32,10 +38,6 @@ Pass_Box = TextBox(app, align="left", grid=[1, 1], width="fill")
 
 Login = PushButton(app, text="Login", grid=[0, 2], align="left", width=5, height=2)
 
-# if (password_check(passwd)):
-#     print("Password is valid")
-# else:
-#     print("Invalid Password !!")
 
 Blank = Text(app, text="        ", grid=[0, 5], align="left", size=20)
 
@@ -89,15 +91,9 @@ Confirm = PushButton(sign_up_window, text="Confirm", align="right", grid=[2,1],c
 
 ##  Window 3  ##
 
-def New_Password():
-    Add_Password.show()
-
-Add_Password = Window(app, title="New Password", layout="grid")
-Add_Password.hide()
-
 Blank_Button = PushButton(Vault_window, text="    Saved Passwords     ", grid=[0, 0], width=40)
-Plus_password = PushButton(Vault_window, text="+", grid=[5, 0])
+Plus_password = PushButton(Vault_window, text="+", grid=[5, 0], command=open_Password)
 
-Plus_password.when_clicked = New_Password()
+Plus_password.when_clicked = open_Password()
 
 app.display()
