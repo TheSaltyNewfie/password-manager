@@ -1,0 +1,31 @@
+[
+{
+  "directory": "/Users/rcullen/PycharmProjects/password-manager/Server",
+  "command": "/usr/bin/g++ -c -Iinclude/ -std=c++20 src/database.cpp",
+  "file": "/Users/rcullen/PycharmProjects/password-manager/Server/src/database.cpp"
+},
+
+{
+  "directory": "/Users/rcullen/PycharmProjects/password-manager/Server",
+  "command": "/usr/bin/g++ -c -Iinclude/ -std=c++20 src/main.cpp",
+  "file": "/Users/rcullen/PycharmProjects/password-manager/Server/src/main.cpp"
+},
+
+{
+  "directory": "/Users/rcullen/PycharmProjects/password-manager/Server",
+  "command": "/usr/bin/g++ -Iinclude/ -std=c++20 -c /Users/rcullen/PycharmProjects/password-manager/Server/include/database.hpp",
+  "file": "/Users/rcullen/PycharmProjects/password-manager/Server/include/database.hpp"
+},
+
+{
+  "directory": "/Users/rcullen/PycharmProjects/password-manager/Server",
+  "command": "/usr/bin/g++ -Iinclude/ -std=c++20 -c /Users/rcullen/PycharmProjects/password-manager/Server/include/schemas.hpp",
+  "file": "/Users/rcullen/PycharmProjects/password-manager/Server/include/schemas.hpp"
+},
+
+{
+  "directory": "/Users/rcullen/PycharmProjects/password-manager/Server",
+  "command": "/usr/bin/g++ -Iinclude/ -std=c++20 -c /Users/rcullen/PycharmProjects/password-manager/Server/include/crow_all.h",
+  "file": "/Users/rcullen/PycharmProjects/password-manager/Server/include/crow_all.h"
+}
+]
