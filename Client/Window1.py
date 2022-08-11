@@ -72,11 +72,17 @@ def confirm_button():
     def no_username():
         sign_up_window.warn("Uh oh!", "Please fill in all boxes.")
 
+    def too_short():
+        sign_up_window.warn("Uh oh!", "Please enter a password that is 12 characters.")
+
     def correct_password():
         open_Vault()
 
     if len(New_UserBox.value) == 0 or len(New_PassBox.value) == 0 or len(Confirm_PassBox.value) == 0:
         Confirm.when_clicked = no_username()
+    elif len(New_PassBox.value) < 12 or len(Confirm_PassBox.value) < 12:
+        Confirm.when_clicked = too_short()
+
     else:
         if New_PassBox.value == Confirm_PassBox.value:
             Confirm.when_clicked = correct_password()
