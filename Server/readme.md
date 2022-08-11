@@ -8,7 +8,8 @@
 - - run `sudo systemctl start postgresql`
 - - run `createuser server -d -r -s`
 - - run `createdb server`
-- - run ```bash
+- - run 
+```bash
 # It's a bit iffy with the order in which migrations are run
 ./migrations.sh up && ./migrations.sh up
 ``` 
