@@ -1,4 +1,5 @@
-from guizero import App, Text, TextBox, Slider, PushButton, Window, Box
+from guizero import App, Text, TextBox, PushButton, Window, error
+import random
 
 ##  Open and close windows  ##
 
@@ -13,6 +14,13 @@ def closed_window():
 
 def open_Password():
     Window.show(Password_window)
+
+def close_Password():
+    Window.hide(Password_window)
+
+def logging_off():
+    Window.hide(Vault_window)
+    Window.hide(sign_up_window)
 
 
 ##  Window 1  ##
@@ -34,7 +42,7 @@ User = Text(app, text="User ID: ", size=20, grid=[0, 0], align="left")
 User_Box = TextBox(app, grid=[1, 0], align="left", width="fill")
 
 Master_Pass = Text(app, text="Master Password: ", grid=[0, 1], size=20, align="left")
-Pass_Box = TextBox(app, align="left", grid=[1, 1], width="fill")
+Pass_Box = TextBox(app, align="left", grid=[1, 1], width="fill", hide_text=True)
 
 Login = PushButton(app, text="Login", grid=[0, 2], align="left", width=5, height=2)
 
@@ -54,11 +62,11 @@ New_User = Text(sign_up_window, text="User ID: ", size=20, grid=[0, 0], align="l
 New_UserBox = TextBox(sign_up_window, grid=[1, 0], align="left", width="fill")
 
 New_Pass = Text(sign_up_window, text="Master Password: ", grid=[0, 1], size=20, align="left")
-New_PassBox = TextBox(sign_up_window, align="left", grid=[1, 1], width="fill")
+New_PassBox = TextBox(sign_up_window, align="left", grid=[1, 1], width="fill", hide_text=True)
 
 
 Confirm_Pass = Text(sign_up_window, text="Confirm Password: ", grid=[0, 3], size=20, align="left")
-Confirm_PassBox = TextBox(sign_up_window, align="left", grid=[1, 3], width="fill")
+Confirm_PassBox = TextBox(sign_up_window, align="left", grid=[1, 3], width="fill", hide_text=True)
 
 
 def confirm_button():
@@ -94,6 +102,43 @@ Confirm = PushButton(sign_up_window, text="Confirm", align="right", grid=[2,1],c
 Blank_Button = PushButton(Vault_window, text="    Saved Passwords     ", grid=[0, 0], width=40)
 Plus_password = PushButton(Vault_window, text="+", grid=[5, 0], command=open_Password)
 
+Logout = PushButton(Vault_window, text="Log Out", grid=[5, 5], command=logging_off)
+
 Plus_password.when_clicked = open_Password()
+
+
+##  Window 4  ##
+
+Password_Name = Text(Password_window, text="Title: ", size=20, grid=[0, 0], align="left")
+Name_TextBox = TextBox(Password_window, grid=[1, 0], width="fill", align="left")
+
+Password_Username = Text(Password_window, text="Username/Email: ", size=20, grid=[0, 1], align="left")
+Username_TextBox = TextBox(Password_window, grid=[1, 1], width="fill", align="left")
+
+Password_Pass = Text(Password_window, text="Password: ", size=20, grid=[0, 2], align="left")
+Password_TextBox = TextBox(Password_window, grid=[1, 2], width="fill", align="left")
+
+Password_Blank = Text(Password_window, text="                  ", size=20, grid=[0, 3], width="fill")
+
+Exit_Button = PushButton(Password_window, text="Back", height=1, width=2, grid=[0, 8], align="left", command=close_Password)
+Save_Button = PushButton(Password_window, text="Save", height=1, width=2, grid=[1, 8])
+
+Password_Text = Text(Password_window, text="To generate a password: ", size=15, grid=[0, 4], align="left")
+Password_Cont = Text(Password_window, text="Enter preferred number of characters.", size=15, grid=[0, 5], align="left")
+Password_Length = TextBox(Password_window, grid=[1, 5], align="left", width=2, height=1)
+
+def get_passwords():
+    password_possibilities = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./?!@#$%&(){}1234567890"
+
+    length = int(len(Password_Length.value))
+
+    for c in range(length):
+        password = ''
+        password += random.choice(password_possibilities)
+        password = str(password)
+        printpass = TextBox(Password_window, text=password, width=20, height=10, grid=[0,10], visible=True, multiline=True)
+
+
+Generate = PushButton(Password_window, command=get_passwords, text="Generate", grid=[1, 7])
 
 app.display()
