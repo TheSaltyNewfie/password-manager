@@ -12,7 +12,7 @@ public:
 public:
   User(std::string id, std::string username, std::string password_hash,
        std::string salt)
-      : m_username(username), m_password_hash(password_hash), m_id(id),
+      : m_id(id), m_username(username), m_password_hash(password_hash),
         m_salt(salt) {}
 };
 

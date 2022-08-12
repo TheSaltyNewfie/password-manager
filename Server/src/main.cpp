@@ -9,31 +9,39 @@
 int main() {
   crow::SimpleApp app;
   pqxx::connection c("dbname=server user=server");
-  pqxx::work conn = pqxx::work(c);
 
   CROW_ROUTE(app, "/auth")
       .methods(crow::HTTPMethod::GET,
-               crow::HTTPMethod::PATCH)([&conn](const crow::request &req) {
+               crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
+        pqxx::work conn = pqxx::work(c);
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
 
         User user = get_user(username, password_hash, conn);
         if (user.m_id == "-1") {
-          return crow::json::wvalue{{"error", "User does not exist."}};
+          return crow::json::wvalue{{"error", user.m_username}};
         }
         std::string token = cookie(user, conn);
 
         if (username != nullptr && password_hash != nullptr) {
-          return crow::json::wvalue{{"token", token}};
+          return crow::json::wvalue{{"token", token.c_str()}};
         }
 
         return crow::json::wvalue{{"error", "error details would be here"}};
       });
 
   CROW_ROUTE(app, "/create")
-      .methods(crow::HTTPMethod::GET, crow::HTTPMethod::PATCH)([]() {
-        return "You technically created an account, but not really cause this "
-               "doesnt work yet :)";
+      .methods(crow::HTTPMethod::GET, crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
+        pqxx::work conn = pqxx::work(c);
+        char *username = req.url_params.get("username");
+        char *password_hash = req.url_params.get("password_hash");
+
+        User user = create_user(username, password_hash, conn);
+        if (user.m_id == "-1") {
+          return crow::json::wvalue{{"error", user.m_username.c_str()}};
+        }
+
+        return crow::json::wvalue{{"success", "true"}};
       });
 
   CROW_ROUTE(app, "/login")

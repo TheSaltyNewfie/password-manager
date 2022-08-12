@@ -19,5 +19,20 @@ User get_user(const char *username, const char *password, pqxx::work &conn) {
            pqxx::to_string(password) + "'"))
     return User(id, username, password, salt);
 
-  return User("-1", "", "", "");
+  return User("-1", "User does not exist.", "", "");
+}
+
+User create_user(const char *username, const char *password_hash,
+                 pqxx::work &conn) {
+  try {
+    pqxx::row row =
+        conn.exec1("INSERT INTO users (username, password_hash) VALUES ('" +
+                   conn.esc(username) + "', '" + conn.esc(password_hash) +
+                   "') RETURNING *");
+    std::string id = row[0].c_str(), user = row[1].c_str(), password = row[2].c_str(), salt = row[3].c_str();
+    conn.commit();
+    return User(id, user, password, salt);
+  } catch (std::exception const &e) {
+    return User("-1", e.what(), "", "");
+  }
 }
