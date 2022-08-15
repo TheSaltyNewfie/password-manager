@@ -46,6 +46,11 @@ int main() {
         return crow::json::wvalue{{"success", "true"}};
       });
 
+  CROW_ROUTE(app, "/delete")
+      .methods(crow::HTTPMethod::GET,
+               crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
+      });
+
   CROW_ROUTE(app, "/new-password")
       .methods(crow::HTTPMethod::GET,
                crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
@@ -102,6 +107,11 @@ int main() {
                                              {"password", acc.m_password}});
 
         return crow::json::wvalue{crow::json::wvalue::list{{final}}};
+      });
+
+  CROW_ROUTE(app, "/delete-password")
+      .methods(crow::HTTPMethod::GET,
+               crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
       });
 
   app.port(18080).multithreaded().run();
