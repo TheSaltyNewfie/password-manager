@@ -11,7 +11,7 @@ main: $(OBJ)
 
 
 $(OBJ): $(SRC)
-	$(CC) -c $(INC) $(SRC) -std=c++20 -Wall
+	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall
 	mv *.o build/
 
 
