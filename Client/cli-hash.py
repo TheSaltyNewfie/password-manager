@@ -24,8 +24,16 @@ elif command == "aes":
     else:
         print("what the ****!!")
 elif command == "scrypt":
-    SCrypt(
-        password=sys.argv[2], salt=sys.argv[3], N=1_024, r=4, p=1, dkLen=128, prf=prf
+    print(
+        SCrypt(
+            password=sys.argv[2],
+            salt=sys.argv[3],
+            N=1_024,
+            r=4,
+            p=1,
+            dkLen=128,
+            prf=prf,
+        )
     )
 else:
     print("What the ****!!")
