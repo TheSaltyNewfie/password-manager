@@ -30,3 +30,13 @@ public:
       : m_id(id), m_user_id(user_id), m_account_name(account_name),
         m_password(password), m_salt(salt) {}
 };
+
+class Account {
+public:
+  std::string m_account_name;
+  std::string m_password;
+
+public:
+  Account(std::string name, std::string password)
+      : m_account_name(name), m_password(password) {}
+};

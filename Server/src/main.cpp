@@ -5,6 +5,7 @@
 #include <iostream>
 #include <pqxx/pqxx>
 #include <pthread.h>
+#include <vector>
 
 int main() {
   crow::SimpleApp app;
@@ -45,6 +46,11 @@ int main() {
         return crow::json::wvalue{{"success", "true"}};
       });
 
+  CROW_ROUTE(app, "/delete")
+      .methods(crow::HTTPMethod::GET,
+               crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
+      });
+
   CROW_ROUTE(app, "/new-password")
       .methods(crow::HTTPMethod::GET,
                crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
@@ -73,6 +79,39 @@ int main() {
         }
 
         return crow::json::wvalue{{"success", "true"}};
+      });
+
+  CROW_ROUTE(app, "/get-passwords")
+      .methods(crow::HTTPMethod::GET,
+               crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
+        pqxx::work conn = pqxx::work(c);
+        char *username = req.url_params.get("username");
+        char *password_hash = req.url_params.get("password_hash");
+        char *token = req.url_params.get("token");
+
+        // Find user
+        User user = get_user(username, password_hash, conn);
+        if (user.m_id == "-1") {
+          return crow::json::wvalue{{"error", user.m_username}};
+        }
+
+        // Verify auth token
+        if (token != cookie(user, conn)) {
+          return crow::json::wvalue{{"error", "Unauthorized request."}};
+        }
+
+        std::vector<Account> accounts = get_passwords(user, conn);
+        std::vector<crow::json::wvalue> final;
+        for (auto acc : accounts)
+          final.push_back(crow::json::wvalue{{"username", acc.m_account_name},
+                                             {"password", acc.m_password}});
+
+        return crow::json::wvalue{crow::json::wvalue::list{{final}}};
+      });
+
+  CROW_ROUTE(app, "/delete-password")
+      .methods(crow::HTTPMethod::GET,
+               crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
       });
 
   app.port(18080).multithreaded().run();
