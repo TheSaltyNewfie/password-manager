@@ -1,17 +1,16 @@
-all: main
-
-CC = g++
-LD = g++
+all: main 
+CC = g++ 
+LD = g++ 
 OBJ = build/*.o
 SRC = src/*
-INC = -Iinclude/
+INC = -Iinclude/ 
 
 main: $(OBJ)
-	$(LD) $(OBJ) -o build/main -pthread -lpqxx -lpq -lssl -L/usr/lib
+	$(LD) $(OBJ) -o build/main -pthread -L/usr/local/opt/openssl/lib -lcrypto -lpqxx -lpq -lssl
 
 
 $(OBJ): $(SRC)
-	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall -Dis_prod=$$PRODUCTION
+	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall -Dis_prod=$$PRODUCTION 
 	mv *.o build/
 
 
