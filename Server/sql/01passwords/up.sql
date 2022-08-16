@@ -4,6 +4,7 @@ CREATE TABLE Passwords (
     user_id uuid NOT NULL REFERENCES Users(id),
     account_name TEXT NOT NULL,
     password TEXT NOT NULL,
+    title TEXT NOT NULL,
     salt TEXT NOT NULL DEFAULT gen_salt('md5')
 );
 

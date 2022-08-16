@@ -35,8 +35,9 @@ class Account {
 public:
   std::string m_account_name;
   std::string m_password;
+  std::string m_title;
 
 public:
-  Account(std::string name, std::string password)
-      : m_account_name(name), m_password(password) {}
+  Account(std::string name, std::string password, std::string title)
+      : m_account_name(name), m_password(password), m_title(title) {}
 };

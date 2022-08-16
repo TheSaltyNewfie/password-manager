@@ -38,13 +38,13 @@ User create_user(const char *username, const char *password_hash,
   }
 }
 
-Password create_password(User user, const char *username, const char *password,
+Password create_password(User user, const char *username, const char *password, const char* title,
                          pqxx::work &conn) {
   try {
     pqxx::row row = conn.exec1(
-        "INSERT INTO passwords (user_id, account_name, password) VALUES ('" +
+        "INSERT INTO passwords (user_id, account_name, password, title) VALUES ('" +
         conn.esc(user.m_id) + "', '" + conn.esc(username) + "', '" +
-        conn.esc(password) + "') RETURNING *");
+        conn.esc(password) + "', '" + conn.esc(title) + "') RETURNING *");
     conn.commit();
     return Password(row[0].c_str(), row[1].c_str(), row[2].c_str(),
                     row[3].c_str(), row[4].c_str());
@@ -56,10 +56,10 @@ Password create_password(User user, const char *username, const char *password,
 std::vector<Account> get_passwords(User user, pqxx::work &conn) {
   try {
     std::vector<Account> accounts;
-    for (auto [username, password] : conn.query<std::string, std::string>(
-             "SELECT account_name, password FROM passwords WHERE user_id = '" +
+    for (auto [username, password, title] : conn.query<std::string, std::string, std::string>(
+             "SELECT account_name, password, title FROM passwords WHERE user_id = '" +
              pqxx::to_string(user.m_id) + "'::uuid")) {
-      accounts.push_back(Account(username, password));
+      accounts.push_back(Account(username, password, title));
     }
     return accounts;
   } catch (std::exception const &e) {
@@ -68,10 +68,12 @@ std::vector<Account> get_passwords(User user, pqxx::work &conn) {
   }
 }
 
-std::string delete_password(User user, std::string username, std::string password, pqxx::work &conn) {
+std::string delete_password(User user, std::string username,
+                            std::string password, pqxx::work &conn) {
   try {
-    conn.exec0(
-        "DELETE FROM passwords WHERE account_name = '" + conn.esc(username) + "' AND password = '" + conn.esc(password) + "' AND user_id = '" + pqxx::to_string(user.m_id) + "'");
+    conn.exec0("DELETE FROM passwords WHERE account_name = '" +
+               conn.esc(username) + "' AND password = '" + conn.esc(password) +
+               "' AND user_id = '" + pqxx::to_string(user.m_id) + "'");
     conn.commit();
     return "success";
   } catch (std::exception const &e) {

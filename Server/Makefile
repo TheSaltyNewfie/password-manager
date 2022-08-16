@@ -2,7 +2,7 @@ all: main
 CC = g++
 LD = g++
 OBJ = build/*.o
-SRC = src/*
+SRC = src/*.cpp
 INC = -Iinclude/
 
 main: $(OBJ)

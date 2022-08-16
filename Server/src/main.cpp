@@ -66,6 +66,7 @@ int main() {
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
         char *token = req.url_params.get("token");
+        char *title = req.url_params.get("title");
         char *pass_user = req.url_params.get("pass_user");
         char *pass_pass = req.url_params.get("pass_pass");
 
@@ -81,7 +82,7 @@ int main() {
         }
 
         // Insert password
-        Password password = create_password(user, pass_user, pass_pass, conn);
+        Password password = create_password(user, pass_user, title, pass_pass, conn);
         if (password.m_id == "-1") {
           return crow::json::wvalue{{"error", password.m_user_id}};
         }
@@ -112,7 +113,8 @@ int main() {
         std::vector<crow::json::wvalue> final;
         for (auto acc : accounts)
           final.push_back(crow::json::wvalue{{"username", acc.m_account_name},
-                                             {"password", acc.m_password}});
+                                             {"password", acc.m_password},
+                                             {"title", acc.m_title}});
 
         return crow::json::wvalue{crow::json::wvalue::list{{final}}};
       });
@@ -145,7 +147,7 @@ int main() {
         return crow::json::wvalue{{"success", "true"}};
       });
 
-#if defined(IS_PROD) && IS_PROD==1
+#if defined(IS_PROD) && IS_PROD == 1
   CROW_LOG_INFO << "Connecting over https";
   app.ssl_file("/ssl_key/certificate.crt", "/ssl_key/private.key");
 #endif
