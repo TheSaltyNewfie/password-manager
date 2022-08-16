@@ -1,3 +1,4 @@
+#define CROW_ENABLE_SSL
 #define CROW_MAIN
 #include <crow_all.h>
 #include "database.hpp"
@@ -6,6 +7,9 @@
 #include <pqxx/pqxx>
 #include <pthread.h>
 #include <vector>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
 
 int main() {
   crow::SimpleApp app;

@@ -7,7 +7,7 @@ SRC = src/*
 INC = -Iinclude/
 
 main: $(OBJ)
-	$(LD) $(OBJ) -o build/main -pthread -lpqxx -lpq
+	$(LD) $(OBJ) -o build/main -pthread -lpqxx -lpq -lssl -L/usr/lib
 
 
 $(OBJ): $(SRC)
