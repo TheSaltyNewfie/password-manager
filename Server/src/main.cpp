@@ -120,6 +120,9 @@ int main() {
                 return crow::json::wvalue{{"nothing yet", "Nothing here yet"}};
       });
 
+
+  app.ssl_file("/home/server/password-manager/Server/ssl_key/self_signed.cert", "/home/server/password-manager/Server/ssl_key/self_signed.key"); // This will cause problems cause well, ya know its not on the system
+
   app.port(18080).multithreaded().run();
 
   return 0;
