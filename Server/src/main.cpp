@@ -1,7 +1,7 @@
 #define CROW_MAIN
-#include <crow_all.h>
 #include "database.hpp"
 #include "schemas.hpp"
+#include <crow_all.h>
 #include <iostream>
 #include <pqxx/pqxx>
 #include <pthread.h>
@@ -48,13 +48,14 @@ int main() {
 
   CROW_ROUTE(app, "/delete")
       .methods(crow::HTTPMethod::GET,
-               crow::HTTPMethod::PATCH)([](const crow::request &req) { // Add the lambda later on
-        char *username = req.url_params.get("username");
-        char *password_hash = req.url_params.get("password_hash");
+               crow::HTTPMethod::PATCH)(
+          [](const crow::request &req) { // Add the lambda later on
+            char *username = req.url_params.get("username");
+            char *password_hash = req.url_params.get("password_hash");
 
-        return crow::json::wvalue{{"Success", "Account deleted"}};
+            return crow::json::wvalue{{"Success", "Account deleted"}};
 
-      });
+          });
 
   CROW_ROUTE(app, "/new-password")
       .methods(crow::HTTPMethod::GET,
@@ -117,11 +118,13 @@ int main() {
   CROW_ROUTE(app, "/delete-password")
       .methods(crow::HTTPMethod::GET,
                crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
-                return crow::json::wvalue{{"nothing yet", "Nothing here yet"}};
+        return crow::json::wvalue{{"nothing yet", "Nothing here yet"}};
       });
 
-
-  app.ssl_file("/home/server/password-manager/Server/ssl_key/self_signed.cert", "/home/server/password-manager/Server/ssl_key/self_signed.key"); // This will cause problems cause well, ya know its not on the system
+#if PRODUCTION == true
+  app.ssl_file("/home/server/password-manager/Server/ssl_key/self_signed.cert",
+               "/home/server/password-manager/Server/ssl_key/self_signed.key");
+#endif
 
   app.port(18080).multithreaded().run();
 
