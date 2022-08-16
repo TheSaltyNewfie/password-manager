@@ -6,7 +6,7 @@ SRC = src/*
 INC = -Iinclude/
 
 main: $(OBJ)
-	$(LD) $(OBJ) -o build/main -pthread -L/usr/local/opt/openssl/lib -lcrypto -lpqxx -lpq -lssl
+	$(LD) $(OBJ) -o build/main -pthread -L/usr/local/opt/openssl/lib -lcrypto -lpqxx -lpq -lssl -DCROW_ENABLE_SSL
 
 
 $(OBJ): $(SRC)

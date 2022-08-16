@@ -1,4 +1,3 @@
-#define CROW_ENABLE_SSL
 #define CROW_MAIN
 #include "database.hpp"
 #include "schemas.hpp"
@@ -145,8 +144,8 @@ int main() {
 
 #if is_prod == true
   CROW_LOG_INFO << "Connecting over https";
-  app.ssl_file("/home/server/password-manager/Server/ssl_key/self_signed.cert",
-               "/home/server/password-manager/Server/ssl_key/self_signed.key");
+  app.ssl_file("/ssl_key/certificate.crt",
+               "/ssl_key/private.key");
 #endif
 
   app.port(18080).multithreaded().run();
