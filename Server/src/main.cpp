@@ -122,10 +122,29 @@ int main() {
   CROW_ROUTE(app, "/delete-password")
       .methods(crow::HTTPMethod::GET,
                crow::HTTPMethod::PATCH)([&c](const crow::request &req) {
+        pqxx::work conn = pqxx::work(c);
+        char *username = req.url_params.get("username");
+        char *password_hash = req.url_params.get("password_hash");
+        char *token = req.url_params.get("token");
+        char *pass_user = req.url_params.get("pass_user");
+        char *pass_pass = req.url_params.get("pass_pass");
+
+        // Find user
+        User user = get_user(username, password_hash, conn);
+        if (user.m_id == "-1") {
+          return crow::json::wvalue{{"error", user.m_username}};
+        }
+
+        // Verify auth token
+        if (token != cookie(user, conn)) {
+          return crow::json::wvalue{{"error", "Unauthorized request."}};
+        }
+
         return crow::json::wvalue{{"nothing yet", "Nothing here yet"}};
       });
 
 #if PRODUCTION == true
+  CROW_LOG_INFO << "Connecting over https";
   app.ssl_file("/home/server/password-manager/Server/ssl_key/self_signed.cert",
                "/home/server/password-manager/Server/ssl_key/self_signed.key");
 #endif
