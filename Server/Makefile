@@ -11,8 +11,9 @@ main: $(OBJ)
 
 
 $(OBJ): $(SRC)
-	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall
+	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall -Dis_prod=$$PRODUCTION
 	mv *.o build/
+	rm src/exec.hpp.gch
 
 
 .PHONY: clean
