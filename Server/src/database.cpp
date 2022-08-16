@@ -54,14 +54,27 @@ Password create_password(User user, const char *username, const char *password,
 }
 
 std::vector<Account> get_passwords(User user, pqxx::work &conn) {
-    try {
-        std::vector<Account> accounts;
-        for (auto [username, password]: conn.query<std::string, std::string>("SELECT account_name, password FROM passwords WHERE user_id = '" + pqxx::to_string(user.m_id) + "'::uuid")) {
-            accounts.push_back(Account(username, password)); 
-        }
-        return accounts;
-    } catch (std::exception const &e) {
-        std::cout << "Error: " << e.what() << std::endl;
-        return std::vector<Account>();
+  try {
+    std::vector<Account> accounts;
+    for (auto [username, password] : conn.query<std::string, std::string>(
+             "SELECT account_name, password FROM passwords WHERE user_id = '" +
+             pqxx::to_string(user.m_id) + "'::uuid")) {
+      accounts.push_back(Account(username, password));
     }
+    return accounts;
+  } catch (std::exception const &e) {
+    std::cout << "Error: " << e.what() << std::endl;
+    return std::vector<Account>();
+  }
+}
+
+std::string delete_password(User user, std::string username, std::string password, pqxx::work &conn) {
+  try {
+    conn.exec0(
+        "DELETE FROM passwords WHERE account_name = '" + conn.esc(username) + "' AND password = '" + conn.esc(password) + "' AND user_id = '" + pqxx::to_string(user.m_id) + "'");
+    conn.commit();
+    return "success";
+  } catch (std::exception const &e) {
+    return "-1";
+  }
 }

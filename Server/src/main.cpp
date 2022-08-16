@@ -3,12 +3,11 @@
 #include "schemas.hpp"
 #include <crow_all.h>
 #include <iostream>
+#include <openssl/err.h>
+#include <openssl/ssl.h>
 #include <pqxx/pqxx>
 #include <pthread.h>
 #include <vector>
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-
 
 int main() {
   crow::SimpleApp app;
@@ -139,13 +138,16 @@ int main() {
           return crow::json::wvalue{{"error", "Unauthorized request."}};
         }
 
-        return crow::json::wvalue{{"nothing yet", "Nothing here yet"}};
+        if (delete_password(user, pass_user, pass_pass, conn) == "-1") {
+          return crow::json::wvalue{{"error", "Password does not exist."}};
+        }
+
+        return crow::json::wvalue{{"success", "true"}};
       });
 
-#if is_prod == true
+#if defined(IS_PROD) && IS_PROD==1
   CROW_LOG_INFO << "Connecting over https";
-  app.ssl_file("/ssl_key/certificate.crt",
-               "/ssl_key/private.key");
+  app.ssl_file("/ssl_key/certificate.crt", "/ssl_key/private.key");
 #endif
 
   app.port(18080).multithreaded().run();

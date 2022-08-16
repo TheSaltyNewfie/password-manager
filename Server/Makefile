@@ -6,11 +6,11 @@ SRC = src/*
 INC = -Iinclude/
 
 main: $(OBJ)
-	$(LD) $(OBJ) -o build/main -pthread -L/usr/local/opt/openssl/lib -lcrypto -lpqxx -lpq -lssl -DCROW_ENABLE_SSL
+	$(LD) $(OBJ) -o build/main -pthread -L/usr/local/opt/openssl/lib -lcrypto -lpqxx -lpq -lssl 
 
 
 $(OBJ): $(SRC)
-	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall -Dis_prod=$$PRODUCTION 
+	$(CC) -c $(INC) $(SRC) -std=gnu++2a -Wall -DIS_PROD=$$PRODUCTION -DCROW_ENABLE_SSL
 	mv *.o build/
 
 

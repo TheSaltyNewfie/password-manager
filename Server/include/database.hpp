@@ -10,4 +10,5 @@ User get_user(const char *username, const char *password, pqxx::work& conn);
 User create_user(const char *username, const char *password_hash, pqxx::work &conn);
 Password create_password(User user, const char* username, const char* password, pqxx::work& conn);
 std::vector<Account> get_passwords(User user, pqxx::work& conn);
+std::string delete_password(User user, std::string username, std::string password, pqxx::work& conn);
 
