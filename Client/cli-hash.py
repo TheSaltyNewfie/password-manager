@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
+
 import sys
 from Crypt.HMAC import HMAC
 from Crypt.AES import AES
 from Crypt.hash import HASH
-from Crypt.SCrypt import SCrypt
+from Crypt.SCrypt import SCRYPT
 
 
 command = sys.argv[1]
@@ -25,7 +27,7 @@ elif command == "aes":
         print("what the ****!!")
 elif command == "scrypt":
     print(
-        SCrypt(
+        SCRYPT(
             password=sys.argv[2],
             salt=sys.argv[3],
             N=1_024,
