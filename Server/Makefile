@@ -1,9 +1,9 @@
-all: main 
-CC = g++ 
-LD = g++ 
+all: main
+CC = g++
+LD = g++
 OBJ = build/*.o
 SRC = src/*
-INC = -Iinclude/ 
+INC = -Iinclude/
 
 main: $(OBJ)
 	$(LD) $(OBJ) -o build/main -pthread -L/usr/local/opt/openssl/lib -lcrypto -lpqxx -lpq -lssl
@@ -16,5 +16,5 @@ $(OBJ): $(SRC)
 
 .PHONY: clean
 clean:
-	find build ! -name '.gitignore' -delete
+	find build ! -name '.gitignore' ! -name 'build' -delete
 

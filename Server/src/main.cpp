@@ -143,7 +143,7 @@ int main() {
         return crow::json::wvalue{{"nothing yet", "Nothing here yet"}};
       });
 
-#if PRODUCTION == true
+#if is_prod == true
   CROW_LOG_INFO << "Connecting over https";
   app.ssl_file("/home/server/password-manager/Server/ssl_key/self_signed.cert",
                "/home/server/password-manager/Server/ssl_key/self_signed.key");
