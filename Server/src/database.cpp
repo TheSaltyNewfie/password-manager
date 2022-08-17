@@ -25,12 +25,12 @@ User get_user(const char *username, const char *password, pqxx::work &conn) {
 }
 
 User create_user(const char *username, const char *password_hash,
-                 pqxx::work &conn) {
+                 std::string salt, pqxx::work &conn) {
   try {
-    pqxx::row row =
-        conn.exec1("INSERT INTO users (username, password_hash) VALUES ('" +
-                   conn.esc(username) + "', '" + conn.esc(password_hash) +
-                   "') RETURNING *");
+    pqxx::row row = conn.exec1(
+        "INSERT INTO users (username, password_hash, salt) VALUES ('" +
+        conn.esc(username) + "', '" + conn.esc(password_hash) + "', '" +
+        conn.esc(salt) + "') RETURNING *");
     std::string id = row[0].c_str(), user = row[1].c_str(),
                 password = row[2].c_str(), salt = row[3].c_str();
     conn.commit();
@@ -89,6 +89,19 @@ std::string delete_password(User user, std::string username,
 std::string get_salt(pqxx::work &conn) {
   try {
     for (auto [salt] : conn.query<std::string>("SELECT gen_salt('md5')"))
+      return salt;
+  } catch (std::exception const &e) {
+    CROW_LOG_ERROR << "Couldn't get salt: " << e.what();
+    exit(1);
+  }
+  return "";
+}
+
+std::string get_salt(const char *username, pqxx::work &conn) {
+  try {
+    for (auto [salt] :
+         conn.query<std::string>("SELECT salt FROM users WHERE username = '" +
+                                 std::string(username) + "'"))
       return salt;
   } catch (std::exception const &e) {
     CROW_LOG_ERROR << "Couldn't get init_vec: " << e.what();
