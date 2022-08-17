@@ -2,7 +2,6 @@
 #include "database.hpp"
 #include "exec.hpp"
 #include "schemas.hpp"
-#include "base64.hpp"
 #include <crow_all.h>
 #include <iostream>
 #include <openssl/err.h>
@@ -21,13 +20,13 @@ int main() {
         pqxx::work conn = pqxx::work(c);
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
-        char *salt = get_salt(username);
+        std::string salt = get_salt(username, conn);
 
         std::string hashed_hash =
             exec("python3 ../../Client/cli-hash.py scrypt " +
                  std::string(password_hash) + " " + salt);
 
-        User user = get_user(username, hashed_hash, conn);
+        User user = get_user(username, hashed_hash.c_str(), conn);
         if (user.m_id == "-1") {
           return crow::json::wvalue{{"error", user.m_username}};
         }
@@ -46,13 +45,13 @@ int main() {
         pqxx::work conn = pqxx::work(c);
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
-        char *salt = get_salt();
+        std::string salt = get_salt(conn);
 
         std::string hashed_hash =
             exec("python3 ../../Client/cli-hash.py scrypt " +
                  std::string(password_hash) + " " + salt);
 
-        User user = create_user(username, hashed_hash, salt, conn);
+        User user = create_user(username, hashed_hash.c_str(), salt, conn);
         if (user.m_id == "-1") {
           return crow::json::wvalue{{"error", user.m_username.c_str()}};
         }
