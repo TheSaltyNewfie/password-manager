@@ -17,8 +17,8 @@ User get_user(const char *username, const char *password, pqxx::work &conn) {
   for (auto [id, salt] : conn.query<std::string, std::string>(
            "SELECT id, salt FROM users "
            "WHERE username = '" +
-           pqxx::to_string(username) + "' AND password_hash = '" +
-           pqxx::to_string(password) + "'"))
+           conn.esc(username) + "' AND password_hash = '" +
+           conn.esc(password) + "'"))
     return User(id, username, password, salt);
 
   return User("-1", "User does not exist.", "", "");

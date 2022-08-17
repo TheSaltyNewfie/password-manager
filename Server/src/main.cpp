@@ -21,10 +21,13 @@ int main() {
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
         std::string salt = get_salt(username, conn);
+        if (salt == "") {
+            return crow::json::wvalue{{"error", "User does not exist."}};
+        }
 
         std::string hashed_hash =
-            exec("python3 ../Client/cli-hash.py scrypt " +
-                 std::string(password_hash) + " " + salt);
+            exec("../Client/cli-hash.py scrypt " +
+                 std::string(password_hash) + " '" + salt + "'");
 
         User user = get_user(username, hashed_hash.c_str(), conn);
         if (user.m_id == "-1") {
@@ -46,10 +49,13 @@ int main() {
         char *username = req.url_params.get("username");
         char *password_hash = req.url_params.get("password_hash");
         std::string salt = get_salt(conn);
+        if (salt == "") {
+            return crow::json::wvalue{{"error", "User does not exist."}};
+        }
 
         std::string hashed_hash =
-            exec("python3 ../Client/cli-hash.py scrypt " +
-                 std::string(password_hash) + " " + salt);
+            exec("../Client/cli-hash.py scrypt " +
+                 std::string(password_hash) + " '" + salt + "'");
 
         User user = create_user(username, hashed_hash.c_str(), salt, conn);
         if (user.m_id == "-1") {

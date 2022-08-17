@@ -10,6 +10,7 @@ from Crypt.SCrypt import SCRYPT
 
 command = sys.argv[1]
 
+sys.stderr.write(' '.join(sys.argv))
 
 def prf(key, msg):
     return HMAC(key=key, msg=msg, digestmod=HASH).digest()
@@ -31,8 +32,8 @@ elif command == "aes":
 elif command == "scrypt":
     print(
         SCRYPT(
-            password=base64.b64decode(sys.argv[2]),
-            salt=sys.argv[3],
+            password=base64.b64decode(sys.argv[2].encode('utf-8') + b'=='),
+            salt=sys.argv[3].encode('utf-8'),
             N=1_024,
             r=4,
             p=1,
