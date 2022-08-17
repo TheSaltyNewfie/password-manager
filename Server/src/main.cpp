@@ -26,8 +26,8 @@ int main() {
         }
 
         std::string hashed_hash =
-            exec("../Client/cli-hash.py scrypt " +
-                 std::string(password_hash) + " '" + salt + "'");
+            exec("../Client/cli-hash.py scrypt '" +
+                 std::string(password_hash) + "' '" + salt + "'");
 
         User user = get_user(username, hashed_hash.c_str(), conn);
         if (user.m_id == "-1") {
@@ -54,8 +54,8 @@ int main() {
         }
 
         std::string hashed_hash =
-            exec("../Client/cli-hash.py scrypt " +
-                 std::string(password_hash) + " '" + salt + "'");
+            exec("../Client/cli-hash.py scrypt '" +
+                 std::string(password_hash) + "' '" + salt + "'");
 
         User user = create_user(username, hashed_hash.c_str(), salt, conn);
         if (user.m_id == "-1") {
