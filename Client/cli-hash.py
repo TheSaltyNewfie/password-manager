@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import base64
 from Crypt.HMAC import HMAC
 from Crypt.AES import AES
 from Crypt.hash import HASH
@@ -30,7 +31,7 @@ elif command == "aes":
 elif command == "scrypt":
     print(
         SCRYPT(
-            password=sys.argv[2],
+            password=base64.b64decode(sys.argv[2]),
             salt=sys.argv[3],
             N=1_024,
             r=4,
