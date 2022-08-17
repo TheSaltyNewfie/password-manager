@@ -23,7 +23,7 @@ int main() {
         std::string salt = get_salt(username, conn);
 
         std::string hashed_hash =
-            exec("python3 ../../Client/cli-hash.py scrypt " +
+            exec("python3 ../Client/cli-hash.py scrypt " +
                  std::string(password_hash) + " " + salt);
 
         User user = get_user(username, hashed_hash.c_str(), conn);
@@ -48,7 +48,7 @@ int main() {
         std::string salt = get_salt(conn);
 
         std::string hashed_hash =
-            exec("python3 ../../Client/cli-hash.py scrypt " +
+            exec("python3 ../Client/cli-hash.py scrypt " +
                  std::string(password_hash) + " " + salt);
 
         User user = create_user(username, hashed_hash.c_str(), salt, conn);
