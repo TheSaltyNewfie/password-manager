@@ -82,7 +82,7 @@ int main() {
         }
 
         // Insert password
-        Password password = create_password(user, pass_user, title, pass_pass, conn);
+        Password password = create_password(user, pass_user, pass_pass, title, conn);
         if (password.m_id == "-1") {
           return crow::json::wvalue{{"error", password.m_user_id}};
         }
