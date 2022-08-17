@@ -48,16 +48,16 @@ int main() {
         return crow::json::wvalue{{"success", "true"}};
       });
 
-  CROW_ROUTE(app, "/delete")
-      .methods(crow::HTTPMethod::GET,
-               crow::HTTPMethod::PATCH)(
-          [](const crow::request &req) { // Add the lambda later on
-            char *username = req.url_params.get("username");
-            char *password_hash = req.url_params.get("password_hash");
-
-            return crow::json::wvalue{{"Success", "Account deleted"}};
-
-          });
+  // CROW_ROUTE(app, "/delete")
+  //     .methods(crow::HTTPMethod::GET,
+  //              crow::HTTPMethod::PATCH)(
+  //         [](const crow::request &req) { // Add the lambda later on
+  //           char *username = req.url_params.get("username");
+  //           char *password_hash = req.url_params.get("password_hash");
+  //
+  //           return crow::json::wvalue{{"Success", "Account deleted"}};
+  //
+  //         });
 
   CROW_ROUTE(app, "/new-password")
       .methods(crow::HTTPMethod::GET,
