@@ -247,6 +247,7 @@ Confirm = PushButton(
 
 def show_passwords():
     global List_of_passwords, passwords
+    List_of_passwords.destroy()
     List_of_passwords = Box(Vault_window, grid=[0, 1])
     for passwd in passwords[0]:
         Text(
