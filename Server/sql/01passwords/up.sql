@@ -5,6 +5,6 @@ CREATE TABLE Passwords (
     account_name TEXT NOT NULL,
     password TEXT NOT NULL,
     title TEXT NOT NULL,
-    salt TEXT NOT NULL DEFAULT gen_salt('md5')
+    salt BYTEA NOT NULL DEFAULT gen_random_bytes(16)
 );
 
